@@ -1,5 +1,6 @@
-# HexGridTestTask
+# HexGridTestTask by idSynth
 A test task for a job interview, HexGrid system in C++
+
 ![изображение](https://github.com/idSynth/HexGridTestTask/assets/43827283/16f227ef-5d2a-4ca7-8ba3-95a5c3ffd704)
 
 # Core functionality
