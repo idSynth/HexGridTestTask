@@ -55,13 +55,17 @@ public:
 	UPROPERTY(EditAnywhere, Category = "HexTile|Visuals")
 	UStaticMeshComponent* HexMesh;
 
-	UPROPERTY(BlueprintReadOnly, Category = "HexTile|Coordinates")
-	FHexCoordinates HexCoordinates;
+	UFUNCTION(BlueprintCallable, Category = "HexGrid")
+	FHexCoordinates GetCoordinates() const;
 
 	virtual void InitializeHex(FHexCoordinates NewHexCoordinates);
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+private:
+	UPROPERTY(VisibleAnywhere, Category = "HexTile|Coordinates")
+	FHexCoordinates HexCoordinates;
 
 };

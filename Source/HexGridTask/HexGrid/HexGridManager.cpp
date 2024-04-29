@@ -133,7 +133,7 @@ const TArray<AHexTile*> AHexGridManager::GetNeighborsForTile(const AHexTile* Til
 		return Neighbors;
 	}
 
-	const FHexCoordinates TileCoordinates = Tile->HexCoordinates;
+	const FHexCoordinates TileCoordinates = Tile->GetCoordinates();
 
 	for (const FVector Direction : Directions)
 	{

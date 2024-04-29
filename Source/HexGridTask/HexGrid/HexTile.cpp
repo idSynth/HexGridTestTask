@@ -18,6 +18,11 @@ void AHexTile::BeginPlay()
 	Super::BeginPlay();
 }
 
+FHexCoordinates AHexTile::GetCoordinates() const
+{
+	return HexCoordinates;
+}
+
 void AHexTile::InitializeHex(FHexCoordinates NewHexCoordinates)
 {
 	HexCoordinates = NewHexCoordinates;
