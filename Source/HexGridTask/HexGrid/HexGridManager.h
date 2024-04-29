@@ -89,11 +89,11 @@ public:
 	AHexTile* GetTile(FHexCoordinates HexCoordinates);
 
 	// Print neighbors of DebugCoordinates1
-	UFUNCTION(BlueprintCallable, Category = "HexGrid|Debug", CallInEditor)
+	UFUNCTION(Category = "HexGrid|Debug", CallInEditor)
 	void PrintNeighbors();
 
 	// Print distance between DebugCoordinates1 and DebugCoordinates2
-	UFUNCTION(BlueprintCallable, Category = "HexGrid|Debug", CallInEditor)
+	UFUNCTION(Category = "HexGrid|Debug", CallInEditor)
 	void PrintDistance();
 
 
