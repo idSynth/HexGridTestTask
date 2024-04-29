@@ -10,7 +10,7 @@ AHexGridManager::AHexGridManager()
 
 void AHexGridManager::InitRadialHexGrid()
 {
-	int32 TotalTiles = 3 * GridRadius * (GridRadius + 1);
+	const int32 TotalTiles = 3 * GridRadius * (GridRadius + 1);
 	TileMap.Reserve(TotalTiles + 1);
 
 	if (bUseUniformOffset)
@@ -81,10 +81,10 @@ void AHexGridManager::InitRectangularHexGrid()
 	}
 }
 
-void AHexGridManager::SpawnTile(const float LocationX, const float LocationY, FHexCoordinates HexCoordinates, int32 x, int32 y)
+void AHexGridManager::SpawnTile(const float LocationX, const float LocationY, const FHexCoordinates HexCoordinates, const int32 x, const int32 y)
 {
-	FVector Location = FVector(GetActorLocation().X + LocationX, GetActorLocation().Y + LocationY, 0.f);
-	FTransform Transform = FTransform(GetActorRotation(), Location);
+	const FVector Location = FVector(GetActorLocation().X + LocationX, GetActorLocation().Y + LocationY, 0.f);
+	const FTransform Transform = FTransform(GetActorRotation(), Location);
 
 	AHexTile* Tile = GetWorld()->SpawnActorDeferred<AHexTile>(HexTileClass, Transform);
 	if (!IsValid(Tile))
@@ -103,7 +103,28 @@ void AHexGridManager::SpawnTile(const float LocationX, const float LocationY, FH
 	}
 }
 
-TArray<AHexTile*> AHexGridManager::GetNeighbors(AHexTile* Tile)
+const TArray<AHexTile*> AHexGridManager::GetNeighborsByCoordinates(const FHexCoordinates HexCoordinates)
+{
+	TArray<AHexTile*> Neighbors;
+
+	for (const FVector Direction : Directions)
+	{
+		FHexCoordinates NewTileCoordinates;
+		NewTileCoordinates.Q = HexCoordinates.Q + Direction.X;
+		NewTileCoordinates.R = HexCoordinates.R + Direction.Y;
+		NewTileCoordinates.S = HexCoordinates.S + Direction.Z;
+
+		if (AHexTile* NeighborTile = GetTile(NewTileCoordinates))
+		{
+			Neighbors.Add(NeighborTile);
+			UKismetSystemLibrary::DrawDebugString(this, FVector::ZAxisVector * 20, TEXT("Found neighbor!"), NeighborTile, FLinearColor::Black, 10);
+		}
+	}
+
+	return Neighbors;
+}
+
+const TArray<AHexTile*> AHexGridManager::GetNeighborsForTile(const AHexTile* Tile)
 {
 	TArray<AHexTile*> Neighbors;
 
@@ -112,9 +133,9 @@ TArray<AHexTile*> AHexGridManager::GetNeighbors(AHexTile* Tile)
 		return Neighbors;
 	}
 
-	FHexCoordinates TileCoordinates = Tile->HexCoordinates;
+	const FHexCoordinates TileCoordinates = Tile->HexCoordinates;
 
-	for (FVector Direction : Directions)
+	for (const FVector Direction : Directions)
 	{
 		FHexCoordinates NewTileCoordinates;
 		NewTileCoordinates.Q = TileCoordinates.Q + Direction.X;
@@ -130,8 +151,8 @@ TArray<AHexTile*> AHexGridManager::GetNeighbors(AHexTile* Tile)
 
 	return Neighbors;
 }
-
-AHexTile* AHexGridManager::GetTile(FHexCoordinates HexCoordinates)
+ 
+AHexTile* AHexGridManager::GetTile(const FHexCoordinates HexCoordinates)
 {	
 	AHexTile** TilePtr = TileMap.Find(HexCoordinates);
 	
@@ -143,7 +164,7 @@ AHexTile* AHexGridManager::GetTile(FHexCoordinates HexCoordinates)
 	return *TilePtr;
 }
 
-int32 AHexGridManager::Distance(FHexCoordinates Hex1, FHexCoordinates Hex2)
+int32 AHexGridManager::Distance(const FHexCoordinates Hex1, const FHexCoordinates Hex2) const
 {
 	return (FMath::Abs(Hex1.Q - Hex2.Q) + FMath::Abs(Hex1.R - Hex2.R) + FMath::Abs(Hex1.S - Hex2.S)) / 2;
 }
@@ -155,10 +176,7 @@ void AHexGridManager::PrintNeighbors()
 	DebugCoordinates.R = DebugCoordinateR1;
 	DebugCoordinates.CalculateS();
 
-	if (AHexTile* Tile = GetTile(DebugCoordinates))
-	{
-		GetNeighbors(Tile);
-	}
+	GetNeighborsByCoordinates(DebugCoordinates);
 }
 
 void AHexGridManager::PrintDistance()
@@ -173,9 +191,9 @@ void AHexGridManager::PrintDistance()
 	Hex2.R = DebugCoordinateR2;
 	Hex2.CalculateS();
 
-	FString Hex1Str = Hex1.ToString();
-	FString Hex2Str = Hex2.ToString();
-	int32 Dist = Distance(Hex1, Hex2);
+	const FString Hex1Str = Hex1.ToString();
+	const FString Hex2Str = Hex2.ToString();
+	const int32 Dist = Distance(Hex1, Hex2);
 
 	UKismetSystemLibrary::PrintString(this, FString::Printf(TEXT("Distance between %s and %s is %d"), *Hex1Str, *Hex2Str, Dist), true, true, FLinearColor::Green, 10);
 }

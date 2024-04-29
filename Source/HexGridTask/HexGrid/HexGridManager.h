@@ -67,26 +67,29 @@ public:
 	bool bShowXYCoordinates = false;
 
 	UPROPERTY(EditAnywhere, Category = "HexGrid|Debug")
-	int32 DebugCoordinateQ1;
+	int32 DebugCoordinateQ1 = 0;
 
 	UPROPERTY(EditAnywhere, Category = "HexGrid|Debug")
-	int32 DebugCoordinateR1;
+	int32 DebugCoordinateR1 = 0;
 
 	UPROPERTY(EditAnywhere, Category = "HexGrid|Debug")
-	int32 DebugCoordinateQ2;
+	int32 DebugCoordinateQ2 = 1;
 
 	UPROPERTY(EditAnywhere, Category = "HexGrid|Debug")
-	int32 DebugCoordinateR2;
+	int32 DebugCoordinateR2 = 1;
 
 
 	UFUNCTION(BlueprintCallable, Category = "HexGrid")
-	TArray<AHexTile*> GetNeighbors(AHexTile* Tile);
+	const TArray<AHexTile*> GetNeighborsByCoordinates(const FHexCoordinates HexCoordinates);
+
+	UFUNCTION(BlueprintCallable, Category = "HexGrid")
+	const TArray<AHexTile*> GetNeighborsForTile(const AHexTile* Tile);
 
 	UFUNCTION(BlueprintPure, Category = "HexGrid")
-	int32 Distance(FHexCoordinates Hex1, FHexCoordinates Hex2);
+	int32 Distance(const FHexCoordinates Hex1, const FHexCoordinates Hex2) const;
 
-	UFUNCTION(BlueprintCallable, Category = "HexGrid|Settings")
-	AHexTile* GetTile(FHexCoordinates HexCoordinates);
+	UFUNCTION(BlueprintCallable, Category = "HexGrid")
+	AHexTile* GetTile(const FHexCoordinates HexCoordinates);
 
 	// Print neighbors of DebugCoordinates1
 	UFUNCTION(Category = "HexGrid|Debug", CallInEditor)
@@ -110,10 +113,10 @@ private:
 
 	void InitRectangularHexGrid();
 
-	void SpawnTile(const float LocationX, const float LocationY, FHexCoordinates HexCoordinates, int32 x, int32 y);
+	void SpawnTile(const float LocationX, const float LocationY, const FHexCoordinates HexCoordinates, const int32 x, const int32 y);
 
 	// Define the directions for the 6 neighbors
-	TArray<FVector> Directions = {
+	const TArray<FVector> Directions = {
 	FVector(1, 0, -1), FVector(+1, -1, 0), FVector(0, -1, 1),
 	FVector(-1, 0, 1), FVector(-1, 1, 0), FVector(0, 1, -1)
 	};
