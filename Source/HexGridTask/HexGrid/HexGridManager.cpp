@@ -22,7 +22,6 @@ void AHexGridManager::InitRadialHexGrid()
     XOffset *= OffsetMultiplier;
     YOffset *= OffsetMultiplier;
 
-    int32 index = 0;
     for (int32 q = -GridRadius; q <= GridRadius; q++)
     {
         int32 r1 = FMath::Max(-GridRadius, -q - GridRadius);
